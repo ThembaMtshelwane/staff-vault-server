@@ -1,7 +1,11 @@
 import User from "../model/userModel";
 
-import { fetchDocs } from "../service/crudHandlerFactory";
+import {
+  fetchDocs,
+  fetchDocsByPagination,
+} from "../service/crudHandlerFactory";
 
 const fetchAllUsers = fetchDocs(User);
+const fetchFilteredUsers = fetchDocsByPagination(User);
 
-export { fetchAllUsers };
+export { fetchAllUsers, fetchFilteredUsers };

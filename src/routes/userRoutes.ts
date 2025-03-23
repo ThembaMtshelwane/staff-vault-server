@@ -1,10 +1,13 @@
 import express from "express";
-import { fetchAllUsers } from "../controllers/userController";
+import {
+  fetchAllUsers,
+  fetchFilteredUsers,
+} from "../controllers/userController";
 
 const router = express.Router();
 
 router.route("/").get(fetchAllUsers);
-// router.get("/filter", fetchFilteredUsers);
+router.get("/filter", fetchFilteredUsers);
 // router.post("/admin", validateRegisterAdmin, createAdminUser);
 // router.post("/login", validateLogin, loginUser);
 // router.post("/logout", logoutUser);
