@@ -6,12 +6,13 @@ import {
   fetchFilteredUsers,
   fetchUserById,
   loginUser,
+  registerAllUsers,
   updateUser,
 } from "../controllers/userController";
 
 const router = express.Router();
 
-router.route("/").get(fetchAllUsers);
+router.route("/").get(fetchAllUsers).post(registerAllUsers);
 router.get("/filter", fetchFilteredUsers);
 // router.post("/admin", validateRegisterAdmin, createAdminUser);
 router.post("/login", loginUser);

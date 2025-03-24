@@ -1,8 +1,9 @@
 import { ADMIN_PASSWORD, USER_PASSWORD } from "../constants/env.const";
 import { BAD_REQUEST } from "../constants/http.codes";
-import { IUser } from "../detinitions";
+import { IDepartmentBasicInfo, IUser } from "../detinitions";
 import User from "../model/userModel";
 import HTTP_Error from "../utils/httpError";
+import { removeDuplicates } from "../utils/utils";
 
 interface IUserCredentials {
   email: string;
@@ -61,4 +62,43 @@ export const addUserService = async (userData: IUserData) => {
     password: USER_PASSWORD,
     supervisor,
   });
+};
+
+export const massStaffRegistrationService = async (
+  input: string[] | IDepartmentBasicInfo[]
+) => {
+  const { uniqueStrings: staffEmails, duplicates } = removeDuplicates(input);
+  const errors: string[] = [];
+  const data: IUser[] = [];
+  let errorMessage = duplicates === 0 ? "" : `${duplicates} Duplicates removed`;
+
+  if (staffEmails && staffEmails.length) {
+    await Promise.all(
+      staffEmails.map(async (email) => {
+        let user = await User.findOne({ email });
+        if (!user) {
+          user = await User.create({
+            email,
+            permissions: ["modify_files", "modify_data"],
+            password: USER_PASSWORD,
+          });
+          data.push(user);
+        } else {
+          errors.push(`${email} already exists`);
+        }
+      })
+    );
+  }
+
+  const message = `✔ Registered: ${data.length} department out of the ${
+    input.length
+  } given. ${
+    errors.length
+      ? ` ⚠ Warning: ${errors.length} departments already exist.
+    ℹ Details: ${errorMessage}`
+      : ""
+  }
+   `;
+
+  return { data, message, errors };
 };

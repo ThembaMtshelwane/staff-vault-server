@@ -14,3 +14,8 @@ export interface IUser extends Document {
   permissions: string[];
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
+
+export interface IDepartmentBasicInfo {
+  name: string;
+  positions: string[];
+}

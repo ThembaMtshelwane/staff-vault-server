@@ -12,7 +12,11 @@ import {
 import HTTP_Error from "../utils/httpError";
 import { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from "../constants/http.codes";
 import generateToken from "../utils/generateToken";
-import { addUserService, loginService } from "../service/authService";
+import {
+  addUserService,
+  loginService,
+  massStaffRegistrationService,
+} from "../service/authService";
 import { IUser } from "../detinitions";
 import { ObjectId } from "mongoose";
 
@@ -51,3 +55,17 @@ export const addUser = expressAsyncHandler(
     });
   }
 );
+
+export const registerAllUsers = expressAsyncHandler(async (req, res) => {
+  const { staffEmails } = req.body;
+  const { data, message } = await massStaffRegistrationService(staffEmails);
+
+  if (data) {
+    res.status(201).json({
+      success: true,
+      message,
+    });
+  } else {
+    throw new HTTP_Error("Failed to create all users", INTERNAL_SERVER_ERROR);
+  }
+});
