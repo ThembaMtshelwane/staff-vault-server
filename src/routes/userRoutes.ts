@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addUser,
   deleteUser,
   fetchAllUsers,
   fetchFilteredUsers,
@@ -15,7 +16,7 @@ router.get("/filter", fetchFilteredUsers);
 // router.post("/admin", validateRegisterAdmin, createAdminUser);
 router.post("/login", loginUser);
 // router.post("/logout", logoutUser);
-// router.post("/add-user", protect, validateAddUser, addUser);
+router.post("/add-user", addUser);
 // router.get("/profile", protect, getUserProfile);
 router.route("/:id").get(fetchUserById).delete(deleteUser).put(updateUser);
 
