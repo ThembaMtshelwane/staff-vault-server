@@ -4,6 +4,7 @@ import {
   fetchAllUsers,
   fetchFilteredUsers,
   fetchUserById,
+  updateUser,
 } from "../controllers/userController";
 
 const router = express.Router();
@@ -15,7 +16,6 @@ router.get("/filter", fetchFilteredUsers);
 // router.post("/logout", logoutUser);
 // router.post("/add-user", protect, validateAddUser, addUser);
 // router.get("/profile", protect, getUserProfile);
-router.route("/:id").get(fetchUserById).delete(deleteUser);
-//   .put(validateId, validateUpdateUser, updateUser);
+router.route("/:id").get(fetchUserById).delete(deleteUser).put(updateUser);
 
 export default router;

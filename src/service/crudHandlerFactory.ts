@@ -99,3 +99,21 @@ export const deleteOneDoc = (Model: any) =>
       message: `${Model.modelName} deleted successfully`,
     });
   });
+
+export const updateOneDoc = (Model: any) =>
+  expressAsyncHandler(async (req: Request, res: Response) => {
+    const updatedDoc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedDoc) {
+      throw new HTTP_Error("No document found with that ID", NOT_FOUND);
+    }
+
+    res.status(OK).json({
+      success: true,
+      message: `${Model.modelName} updated successfully`,
+      data: updatedDoc,
+    });
+  });
