@@ -5,6 +5,7 @@ import {
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
+  OK,
 } from "../constants/http.codes";
 import mongoose from "mongoose";
 
@@ -74,7 +75,7 @@ export const fetchDocsByPagination = (Model: any) =>
   });
 
 export const fetchOneDoc = (Model: any) =>
-  expressAsyncHandler(async (req, res) => {
+  expressAsyncHandler(async (req: Request, res: Response) => {
     const foundDocument = await Model.findById(req.params.id);
 
     if (!foundDocument)
@@ -87,4 +88,14 @@ export const fetchOneDoc = (Model: any) =>
     });
   });
 
-  
+export const deleteOneDoc = (Model: any) =>
+  expressAsyncHandler(async (req: Request, res: Response) => {
+    const removedDocument = await Model.findByIdAndDelete(req.params.id);
+    if (!removedDocument)
+      throw new HTTP_Error("No document found with that ID", NOT_FOUND);
+
+    res.status(OK).json({
+      success: true,
+      message: `${Model.modelName} deleted successfully`,
+    });
+  });

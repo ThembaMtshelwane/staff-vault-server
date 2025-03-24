@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  deleteUser,
   fetchAllUsers,
   fetchFilteredUsers,
   fetchUserById,
@@ -14,8 +15,7 @@ router.get("/filter", fetchFilteredUsers);
 // router.post("/logout", logoutUser);
 // router.post("/add-user", protect, validateAddUser, addUser);
 // router.get("/profile", protect, getUserProfile);
-router.route("/:id").get(fetchUserById);
-//   .delete(validateId, deleteUser)
+router.route("/:id").get(fetchUserById).delete(deleteUser);
 //   .put(validateId, validateUpdateUser, updateUser);
 
 export default router;
