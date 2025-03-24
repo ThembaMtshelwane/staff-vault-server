@@ -1,3 +1,4 @@
+import expressAsyncHandler from "express-async-handler";
 import User from "../model/userModel";
 
 import {
@@ -7,9 +8,30 @@ import {
   fetchOneDoc,
   updateOneDoc,
 } from "../service/crudHandlerFactory";
+import HTTP_Error from "../utils/httpError";
+import { UNAUTHORIZED } from "../constants/http.codes";
+import generateToken from "../utils/generateToken";
+import { loginService } from "../service/authService";
+import { IUser } from "../detinitions";
+import { ObjectId } from "mongoose";
 
 export const fetchAllUsers = fetchDocs(User);
 export const fetchFilteredUsers = fetchDocsByPagination(User);
 export const fetchUserById = fetchOneDoc(User);
 export const deleteUser = deleteOneDoc(User);
 export const updateUser = updateOneDoc(User);
+
+export const loginUser = expressAsyncHandler(async (req, res) => {
+  const user: IUser | null = await loginService(req.body);
+
+  if (user) {
+    generateToken(res, user._id as ObjectId);
+    res.status(200).json({
+      success: true,
+      message: "User authenticated successfully",
+      data: user,
+    });
+  } else {
+    throw new HTTP_Error("Invalid email or password", UNAUTHORIZED);
+  }
+});
