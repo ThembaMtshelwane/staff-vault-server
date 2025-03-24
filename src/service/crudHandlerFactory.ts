@@ -6,7 +6,7 @@ import {
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
 } from "../constants/http.codes";
-import mongoose, { Model } from "mongoose";
+import mongoose from "mongoose";
 
 export const fetchDocs = (Model: any) =>
   expressAsyncHandler(async (req: Request, res: Response) => {
@@ -72,3 +72,19 @@ export const fetchDocsByPagination = (Model: any) =>
       throw new HTTP_Error(`No ${Model.modelName}s  found`, NOT_FOUND);
     }
   });
+
+export const fetchOneDoc = (Model: any) =>
+  expressAsyncHandler(async (req, res) => {
+    const foundDocument = await Model.findById(req.params.id);
+
+    if (!foundDocument)
+      throw new HTTP_Error("No document found with that ID", NOT_FOUND);
+
+    res.status(200).json({
+      success: true,
+      message: `Retrieved ${Model.modelName}`,
+      data: foundDocument,
+    });
+  });
+
+  
