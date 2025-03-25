@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { NODE_ENV } from "../constants/env.const.js";
+import { NODE_ENV } from "../constants/env.const";
 import {
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
-} from "../constants/http.codes.js";
-import HTTP_Error from "../utils/httpError.js";
+} from "../constants/http.codes";
+import HTTP_Error from "../utils/httpError";
 import { ZodError } from "zod";
 
 /*
@@ -16,7 +16,7 @@ const notFound = (req: Request, res: Response, next: NextFunction) => {
   next(error);
 };
 
-const handleZodError = (err) => {
+const handleZodError = (err: ZodError) => {
   const errors = err.issues.map((issue) => ({
     path: issue.path.join("."),
     message: issue.message,
@@ -37,7 +37,7 @@ const handleZodError = (err) => {
 */
 
 const errorHandler = (
-  err: Error,
+  err: any | Error | ZodError | HTTP_Error,
   req: Request,
   res: Response,
   next: NextFunction
@@ -50,7 +50,7 @@ const errorHandler = (
   //   }
 
   if (err instanceof HTTP_Error) {
-    return res.status(err.statusCode).json({
+    res.status(err.statusCode).json({
       success: false,
       message: err.message,
       stack: NODE_ENV === "development" ? err.stack : null,
@@ -59,7 +59,7 @@ const errorHandler = (
 
   if (err instanceof ZodError) {
     const { statusCode, body } = handleZodError(err);
-    return res.status(statusCode).json(body);
+    res.status(statusCode).json(body);
   }
 
   res.status(INTERNAL_SERVER_ERROR).json({
@@ -68,6 +68,8 @@ const errorHandler = (
       "Serious server error, something went terribly wrong, call for help!",
     stack: NODE_ENV === "development" ? err.stack : null,
   });
+
+  next();
 };
 
 export { notFound, errorHandler };
