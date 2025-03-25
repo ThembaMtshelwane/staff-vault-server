@@ -3,9 +3,9 @@ import expressAsyncHandler from "express-async-handler";
 import User from "../model/userModel";
 import { JWT_SECRET } from "../constants/env.const";
 import { NextFunction, Request, Response } from "express";
-import { IUser } from "../detinitions";
+import { IUser, UserRole } from "../detinitions";
 import HTTP_Error from "../utils/httpError";
-import { NOT_FOUND, UNAUTHORIZED } from "../constants/http.codes";
+import { FORBIDDEN, NOT_FOUND, UNAUTHORIZED } from "../constants/http.codes";
 
 interface AuthRequest extends Request {
   user?: IUser;
@@ -35,3 +35,15 @@ export const protect = expressAsyncHandler(
     }
   }
 );
+
+export const routeAcess = (roles: UserRole[]) => {
+  return expressAsyncHandler(
+    async (req: AuthRequest, res: Response, next: NextFunction) => {
+      if (req.user && roles.includes(req.user.role)) {
+        next();
+      } else {
+        next(new HTTP_Error("Forbidden to access this", FORBIDDEN));
+      }
+    }
+  );
+};

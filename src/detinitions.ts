@@ -1,6 +1,6 @@
 import mongoose, { Document } from "mongoose";
 
-type UserRole = "general" | "admin" | "manager";
+export type UserRole = "general" | "admin" | "super_admin";
 
 export interface IUser extends Document {
   firstName: string;
