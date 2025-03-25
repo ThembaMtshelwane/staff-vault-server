@@ -11,16 +11,21 @@ import {
   registerAllUsers,
   updateUser,
 } from "../controllers/userController";
+import { protect } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-router.route("/").get(fetchAllUsers).post(registerAllUsers);
-router.get("/filter", fetchFilteredUsers);
-router.post("/admin", createAdminUser);
+router.route("/").get(protect, fetchAllUsers).post(protect, registerAllUsers);
+router.get("/filter", protect, fetchFilteredUsers);
+router.post("/admin", protect, createAdminUser);
 router.post("/login", loginUser);
-router.post("/logout", logoutUser);
-router.post("/add-user", addUser);
+router.post("/logout", protect, logoutUser);
+router.post("/add-user", protect, addUser);
 // router.get("/profile", protect, getUserProfile);
-router.route("/:id").get(fetchUserById).delete(deleteUser).put(updateUser);
+router
+  .route("/:id")
+  .get(protect, fetchUserById)
+  .delete(protect, deleteUser)
+  .put(protect, updateUser);
 
 export default router;
