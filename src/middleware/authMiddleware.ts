@@ -22,7 +22,9 @@ export const protect = expressAsyncHandler(
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
-      const user = await User.findById(decoded.userID).select("-password");
+      const user: IUser = await User.findById(decoded.userID).select(
+        "-password"
+      );
 
       if (!user) {
         throw new HTTP_Error("Not authorized, user not found", NOT_FOUND);

@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import cookieParser from "cookie-parser";
-import express, { Request, Response } from "express";
+import express from "express";
 import connectDB from "./config/db";
 import cors from "cors";
 
@@ -21,7 +21,8 @@ app.use(cookieParser());
 app.use("/api/users", userRoutes);
 
 app.use(notFound);
-app.use(errorHandler);
+app.use(errorHandler as unknown as express.ErrorRequestHandler);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

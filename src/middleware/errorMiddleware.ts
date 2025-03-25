@@ -41,16 +41,9 @@ const errorHandler = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
-  console.log("*************************** caught error :,", err);
-
-  //   if (err.name === "CastError" && err.kind === "ObjectId") {
-  //     statusCode = 404;
-  //     message = "Resource Not Found";
-  //   }
-
+): Response | void => {
   if (err instanceof HTTP_Error) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       success: false,
       message: err.message,
       stack: NODE_ENV === "development" ? err.stack : null,
@@ -59,10 +52,10 @@ const errorHandler = (
 
   if (err instanceof ZodError) {
     const { statusCode, body } = handleZodError(err);
-    res.status(statusCode).json(body);
+    return res.status(statusCode).json(body);
   }
 
-  res.status(INTERNAL_SERVER_ERROR).json({
+  return res.status(INTERNAL_SERVER_ERROR).json({
     success: false,
     message:
       "Serious server error, something went terribly wrong, call for help!",

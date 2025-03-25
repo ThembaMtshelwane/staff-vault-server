@@ -20,6 +20,10 @@ import {
 import { IUser } from "../detinitions";
 import { ObjectId } from "mongoose";
 
+export interface AuthRequest extends Request {
+  user?: IUser;
+}
+
 export const fetchAllUsers = fetchDocs(User);
 export const fetchFilteredUsers = fetchDocsByPagination(User);
 export const fetchUserById = fetchOneDoc(User);
@@ -95,6 +99,31 @@ export const logoutUser = expressAsyncHandler(
     res.status(200).json({
       success: true,
       message: "User logged out",
+    });
+  }
+);
+
+export const getUserProfile = expressAsyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    if (!req.user) {
+      throw new HTTP_Error("Not authorized, user not found", UNAUTHORIZED);
+    }
+    const user = {
+      _id: (req.user._id as ObjectId).toString(),
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      email: req.user.email,
+      position: req.user.position || "",
+      role: req.user.role,
+      permissions: req.user.permissions || [],
+      department: req.user.department ? req.user.department.toString() : null,
+      supervisor: req.user.supervisor ? req.user.supervisor.toString() : null,
+    };
+
+    res.status(200).json({
+      success: true,
+      message: "Logged in user data returned",
+      data: user,
     });
   }
 );
