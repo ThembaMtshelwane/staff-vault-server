@@ -56,16 +56,45 @@ export const addUser = expressAsyncHandler(
   }
 );
 
-export const registerAllUsers = expressAsyncHandler(async (req, res) => {
-  const { staffEmails } = req.body;
-  const { data, message } = await massStaffRegistrationService(staffEmails);
+export const registerAllUsers = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const staffEmails: string[] = req.body.staffEmails;
+    const { data, message } = await massStaffRegistrationService(staffEmails);
 
-  if (data) {
+    if (data) {
+      res.status(201).json({
+        success: true,
+        message,
+      });
+    } else {
+      throw new HTTP_Error("Failed to create all users", INTERNAL_SERVER_ERROR);
+    }
+  }
+);
+
+export const createAdminUser = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const user = await addUserService({ ...req.body, role: "admin" });
+    if (!user) {
+      throw new HTTP_Error("Failed to create admin", INTERNAL_SERVER_ERROR);
+    }
     res.status(201).json({
       success: true,
-      message,
+      message: `Successfully created an admin`,
+      data: user,
     });
-  } else {
-    throw new HTTP_Error("Failed to create all users", INTERNAL_SERVER_ERROR);
   }
-});
+);
+
+export const logoutUser = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+    res.status(200).json({
+      success: true,
+      message: "User logged out",
+    });
+  }
+);

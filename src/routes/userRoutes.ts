@@ -1,11 +1,13 @@
 import express from "express";
 import {
   addUser,
+  createAdminUser,
   deleteUser,
   fetchAllUsers,
   fetchFilteredUsers,
   fetchUserById,
   loginUser,
+  logoutUser,
   registerAllUsers,
   updateUser,
 } from "../controllers/userController";
@@ -14,9 +16,9 @@ const router = express.Router();
 
 router.route("/").get(fetchAllUsers).post(registerAllUsers);
 router.get("/filter", fetchFilteredUsers);
-// router.post("/admin", validateRegisterAdmin, createAdminUser);
+router.post("/admin", createAdminUser);
 router.post("/login", loginUser);
-// router.post("/logout", logoutUser);
+router.post("/logout", logoutUser);
 router.post("/add-user", addUser);
 // router.get("/profile", protect, getUserProfile);
 router.route("/:id").get(fetchUserById).delete(deleteUser).put(updateUser);
