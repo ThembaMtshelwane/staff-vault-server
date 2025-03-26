@@ -31,7 +31,7 @@ export const addUserService = async (userData: IUserData) => {
   const { firstName, lastName, email, position, department, role, supervisor } =
     userData;
 
-  const userExists = await User.findOne({ email });
+  const userExists: IUser | null = await User.findOne({ email });
 
   if (userExists) {
     throw new HTTP_Error(

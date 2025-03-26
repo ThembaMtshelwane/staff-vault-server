@@ -54,3 +54,23 @@ export const massDepartmentCreationService = async (
 
   return { data, message, errors };
 };
+
+export const addDepartmentService = async (
+  departmentData: Partial<IDepartment>
+) => {
+  const { name, supervisor, positions } = departmentData;
+  const departmentExists: IDepartment | null = await Department.findOne({
+    name,
+  });
+  if (departmentExists) {
+    throw new HTTP_Error("Department already exists", BAD_REQUEST);
+  }
+
+  const department: IDepartment = await Department.create({
+    name,
+    supervisor,
+    positions,
+  });
+
+  return department;
+};

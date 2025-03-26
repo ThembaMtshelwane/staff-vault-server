@@ -1,7 +1,10 @@
 import asyncHandler from "express-async-handler";
 import { INTERNAL_SERVER_ERROR } from "../constants/http.codes";
 import HTTP_Error from "../utils/httpError";
-import { massDepartmentCreationService } from "../service/departmnetService";
+import {
+  addDepartmentService,
+  massDepartmentCreationService,
+} from "../service/departmnetService";
 
 /**
  *  @description Create all of the organization's department
@@ -24,5 +27,17 @@ export const massDepartmentCreation = asyncHandler(async (req, res) => {
       "Failed to create all departments",
       INTERNAL_SERVER_ERROR
     );
+  }
+});
+
+export const addDepartment = asyncHandler(async (req, res) => {
+  const department = await addDepartmentService(req.body);
+  if (department) {
+    res.status(201).json({
+      success: true,
+      message: "Department created successfully",
+    });
+  } else {
+    throw new HTTP_Error("Department not created", INTERNAL_SERVER_ERROR);
   }
 });
