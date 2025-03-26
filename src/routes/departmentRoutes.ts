@@ -8,10 +8,14 @@ import {
   massDepartmentCreation,
   updateDepartment,
 } from "../controllers/departmentController";
+import { validateMassDepartmentCreation } from "../middleware/validators/departmentValidator";
 
 const router = express.Router();
 
-router.route("/").post(massDepartmentCreation).get(getDepartments);
+router
+  .route("/")
+  .post(validateMassDepartmentCreation, massDepartmentCreation)
+  .get(getDepartments);
 router.get("/filter", getFilteredDepartments);
 router.post("/add", addDepartment);
 router
