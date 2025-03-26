@@ -19,3 +19,9 @@ export interface IDepartmentBasicInfo {
   name: string;
   positions: string[];
 }
+
+export interface IDepartment extends Document {
+  name: string;
+  positions: string[];
+  supervisor: mongoose.Schema.Types.ObjectId;
+}

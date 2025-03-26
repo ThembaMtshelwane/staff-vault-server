@@ -12,7 +12,7 @@ import {
   updateUser,
   getUserProfile,
 } from "../controllers/userController";
-import { protect, routeAcess } from "../middleware/authMiddleware";
+import { protect, routeAccess } from "../middleware/authMiddleware";
 import {
   validateLogin,
   validateRegisterAdmin,
@@ -28,24 +28,24 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(protect, routeAcess(["admin", "general"]), fetchAllUsers)
+  .get(protect, routeAccess(["admin", "general"]), fetchAllUsers)
   .post(
     protect,
-    routeAcess(["admin", "super_admin"]),
+    routeAccess(["admin", "super_admin"]),
     validateRegisterAllUsers,
     registerAllUsers
   );
 router.get(
   "/filter",
   protect,
-  routeAcess(["admin", "general"]),
+  routeAccess(["admin", "general"]),
   validateFetchFilteredUsers,
   fetchFilteredUsers
 );
 router.post(
   "/admin",
   protect,
-  routeAcess(["super_admin"]),
+  routeAccess(["super_admin"]),
   validateRegisterAdmin,
   createAdminUser
 );
@@ -53,21 +53,21 @@ router.post("/login", validateLogin, loginUser);
 router.post(
   "/logout",
   protect,
-  routeAcess(["admin", "general", "super_admin"]),
+  routeAccess(["admin", "general", "super_admin"]),
   logoutUser
 );
 router.post(
   "/add-user",
   protect,
-  routeAcess(["admin"]),
+  routeAccess(["admin"]),
   validateAddUser,
   addUser
 );
 router.get("/profile", protect, getUserProfile);
 router
   .route("/:id")
-  .get(protect, routeAcess(["admin", "general"]), validateId, fetchUserById)
-  .delete(protect, routeAcess(["admin"]), validateId, deleteUser)
-  .put(protect, routeAcess(["general"]), validateId, updateUser);
+  .get(protect, routeAccess(["admin", "general"]), validateId, fetchUserById)
+  .delete(protect, routeAccess(["admin"]), validateId, deleteUser)
+  .put(protect, routeAccess(["general"]), validateId, updateUser);
 
 export default router;
