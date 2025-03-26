@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { departmentsListSchema } from "../../schemas/departmentSchema";
 import { BAD_REQUEST } from "../../constants/http.codes";
 
-export const validateMassDepartmentCreation= expressAsyncHandler(
+export const validateMassDepartmentCreation = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { departmentsList } = req.body;
     const result = departmentsListSchema.safeParse(departmentsList);

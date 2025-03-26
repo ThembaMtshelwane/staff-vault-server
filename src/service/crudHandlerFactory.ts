@@ -10,6 +10,12 @@ import {
 } from "../constants/http.codes";
 import mongoose from "mongoose";
 
+interface QueryParams extends Request {
+  page?: string;
+  search?: string;
+  department: string | null;
+}
+
 export const fetchDocs = (Model: any) =>
   expressAsyncHandler(async (req: Request, res: Response) => {
     const documents = await Model.find({});

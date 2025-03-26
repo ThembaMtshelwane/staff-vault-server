@@ -1,20 +1,14 @@
 import expressAsyncHandler from "express-async-handler";
 import {
   addUserSchema,
-  fetchUsersSchema,
   updateUserSchema,
   userIdSchema,
   userProfileSchema,
 } from "../../schemas/userSchema";
 import { NextFunction, Request, Response } from "express";
 import { BAD_REQUEST } from "../../constants/http.codes";
-import { ParsedQs } from "qs";
 
-interface QueryParams extends ParsedQs {
-  page?: string;
-  search?: string;
-  // department?: string | null;
-}
+
 
 export const validateAddUser = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -41,39 +35,6 @@ export const validateAddUser = expressAsyncHandler(
   }
 );
 
-interface QueryParams extends ParsedQs {
-  page?: string;
-  search?: string;
-  // department?: string | null;
-}
-
-export const validateFetchFilteredUsers = expressAsyncHandler(
-  async (
-    req: Request<{}, {}, {}, QueryParams>, // Ensure query params align with ParsedQs
-    res: Response,
-    next: NextFunction
-  ) => {
-    // Convert numeric values since req.query values are always strings
-    const parsedQuery = fetchUsersSchema.safeParse({
-      page: req.query.page,
-      search: req.query.search,
-      department: req.query.department ?? null,
-    });
-
-    if (!parsedQuery.success) {
-      res.status(BAD_REQUEST);
-      return next(parsedQuery.error);
-    }
-
-    console.log("req.query:", req.query);
-    console.log("parsedQuery.data:", parsedQuery.data);
-
-    // Merge parsed values back into req.query safely
-    req.query = { ...parsedQuery.data } as any;
-
-    next();
-  }
-);
 export const validateId = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const parsedParams = userIdSchema.safeParse(req.params);

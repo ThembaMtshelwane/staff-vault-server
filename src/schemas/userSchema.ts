@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { z } from "zod";
 import {
-  fetchContentByFilters,
   objectIdSchema,
   passwordSchema,
   positionSchema,
@@ -10,7 +9,7 @@ import {
 
 export const addUserSchema = userInfoSchema;
 
-export const fetchUsersSchema = fetchContentByFilters;
+
 
 export const userIdSchema = z.object({
   id: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {

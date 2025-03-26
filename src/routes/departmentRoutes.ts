@@ -9,6 +9,7 @@ import {
   updateDepartment,
 } from "../controllers/departmentController";
 import { validateMassDepartmentCreation } from "../middleware/validators/departmentValidator";
+import { validateFetchFilteredDocs } from "../middleware/validators/genericValidators";
 
 const router = express.Router();
 
@@ -16,7 +17,9 @@ router
   .route("/")
   .post(validateMassDepartmentCreation, massDepartmentCreation)
   .get(getDepartments);
-router.get("/filter", getFilteredDepartments);
+
+router.get("/filter", validateFetchFilteredDocs, getFilteredDepartments);
+
 router.post("/add", addDepartment);
 router
   .route("/:id")

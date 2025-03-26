@@ -20,9 +20,9 @@ import {
 } from "../middleware/validators/authValidator";
 import {
   validateAddUser,
-  validateFetchFilteredUsers,
   validateId,
 } from "../middleware/validators/userValidator";
+import { validateFetchFilteredDocs } from "../middleware/validators/genericValidators";
 
 const router = express.Router();
 
@@ -39,7 +39,7 @@ router.get(
   "/filter",
   protect,
   routeAccess(["admin", "general"]),
-  validateFetchFilteredUsers,
+  // validateFetchFilteredDocs,
   fetchFilteredUsers
 );
 router.post(

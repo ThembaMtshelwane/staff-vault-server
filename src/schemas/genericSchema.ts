@@ -12,16 +12,16 @@ export const positionSchema = z
 
 export const pageSchema = z
   .string()
-  .optional()
-  .transform((val) => (val ? Number(val) : 1));
+  .regex(/^\d+$/, "Page must be a valid number")
+  .or(z.number())
+  .default(1);
 
 export const objectIdSchema = z
   .string()
-  .nullable()
-  .refine((val) => val === null || mongoose.Types.ObjectId.isValid(val), {
+  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
     message: "Invalid Object ID",
   })
-  .optional();
+  .or(z.null());
 
 export const nonNullMongoIdSchema = z.object({
   id: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
@@ -42,7 +42,7 @@ export const userInfoSchema = basicUserInfoSchema.extend({
   supervisor: objectIdSchema,
 });
 
-export const fetchContentByFilters = z.object({
+export const fetchFilteredDocsSchema = z.object({
   page: pageSchema,
   search: z.string().optional().default(""),
   department: objectIdSchema,
