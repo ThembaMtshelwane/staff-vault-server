@@ -10,10 +10,11 @@ import {
   logoutUser,
   registerAllUsers,
   updateUser,
-  getUserProfile
+  getUserProfile,
 } from "../controllers/userController";
 import { protect, routeAcess } from "../middleware/authMiddleware";
 import {
+  validateLogin,
   validateRegisterAdmin,
   validateRegisterAllUsers,
 } from "../middleware/validators/authValidator";
@@ -48,7 +49,7 @@ router.post(
   validateRegisterAdmin,
   createAdminUser
 );
-router.post("/login", loginUser);
+router.post("/login", validateLogin, loginUser);
 router.post(
   "/logout",
   protect,
@@ -65,8 +66,8 @@ router.post(
 router.get("/profile", protect, getUserProfile);
 router
   .route("/:id")
-  .get(protect, validateId, routeAcess(["admin", "general"]), fetchUserById)
-  .delete(protect, validateId, routeAcess(["admin"]), deleteUser)
-  .put(protect, validateId, routeAcess(["general"]), updateUser);
+  .get(protect, routeAcess(["admin", "general"]), validateId, fetchUserById)
+  .delete(protect, routeAcess(["admin"]), validateId, deleteUser)
+  .put(protect, routeAcess(["general"]), validateId, updateUser);
 
 export default router;

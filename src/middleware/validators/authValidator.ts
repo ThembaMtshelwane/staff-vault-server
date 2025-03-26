@@ -47,12 +47,18 @@ export const validateRegisterAdmin = expressAsyncHandler(
   }
 );
 
-export const validateLogin = expressAsyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
-  const result = loginSchema.safeParse({ email, password });
-  if (!result.success) {
-    return next(result.error);
+export const validateLogin = expressAsyncHandler(
+  async (
+    req: TypedRequestBody<Partial<IUser>>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { email, password } = req.body;
+    const result = loginSchema.safeParse({ email, password });
+    if (!result.success) {
+      return next(result.error);
+    }
+    req.body = result.data;
+    next();
   }
-  req.body = result.data;
-  next();
-});
+);
