@@ -18,11 +18,11 @@ import {
   validateRegisterAdmin,
   validateRegisterAllUsers,
 } from "../middleware/validators/authValidator";
+import { validateAddUser } from "../middleware/validators/userValidator";
 import {
-  validateAddUser,
-  validateId,
-} from "../middleware/validators/userValidator";
-import { validateFetchFilteredDocs } from "../middleware/validators/genericValidators";
+  validateFetchFilteredDocs,
+  validateModelID,
+} from "../middleware/validators/genericValidators";
 
 const router = express.Router();
 
@@ -66,8 +66,13 @@ router.post(
 router.get("/profile", protect, getUserProfile);
 router
   .route("/:id")
-  .get(protect, routeAccess(["admin", "general"]), validateId, fetchUserById)
-  .delete(protect, routeAccess(["admin"]), validateId, deleteUser)
-  .put(protect, routeAccess(["general"]), validateId, updateUser);
+  .get(
+    protect,
+    routeAccess(["admin", "general"]),
+    validateModelID,
+    fetchUserById
+  )
+  .delete(protect, routeAccess(["admin"]), validateModelID, deleteUser)
+  .put(protect, routeAccess(["general"]), validateModelID, updateUser);
 
 export default router;

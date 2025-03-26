@@ -1,7 +1,10 @@
 import expressAsyncHandler from "express-async-handler";
 import { Request, Response, NextFunction } from "express";
 import { BAD_REQUEST } from "../../constants/http.codes";
-import { fetchFilteredDocsSchema } from "../../schemas/genericSchema";
+import {
+  fetchFilteredDocsSchema,
+  objectIdSchema,
+} from "../../schemas/genericSchema";
 
 interface QueryParams extends Request {
   page?: string;
@@ -32,3 +35,15 @@ export const validateFetchFilteredDocs = expressAsyncHandler(
     next();
   }
 );
+
+export const validateModelID = expressAsyncHandler(async (req, res, next) => {
+  const result = objectIdSchema.safeParse(req.params.id);
+
+  if (!result.success) {
+    res.status(BAD_REQUEST);
+    return next(result.error);
+  }
+
+  req.params.id = result.data as string;
+  next();
+});

@@ -105,7 +105,7 @@ export const logoutUser = expressAsyncHandler(
 
 export const getUserProfile = expressAsyncHandler(
   async (req: AuthRequest, res: Response) => {
-    if (!req.user) {
+    if (!req.user?._id) {
       throw new HTTP_Error("Not authorized, user not found", UNAUTHORIZED);
     }
     const user = {
