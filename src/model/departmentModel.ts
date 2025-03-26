@@ -1,15 +1,19 @@
 import mongoose, { Schema, ObjectId, Types, Model } from "mongoose";
 import { IDepartment } from "../detinitions";
+import { timeStamp } from "console";
 
-const departmentSchema: Schema<IDepartment> = new Schema({
-  name: { type: String, required: true },
-  supervisor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    default: null,
+const departmentSchema: Schema<IDepartment> = new Schema(
+  {
+    name: { type: String, required: true },
+    supervisor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
     positions: { type: [String], default: [] },
   },
-});
+  { timestamps: true }
+);
 
 const Department: Model<IDepartment> = mongoose.model<IDepartment>(
   "Department",

@@ -3,6 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 import HTTP_Error from "../utils/httpError";
 import {
   BAD_REQUEST,
+  CONFLICT,
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
   OK,
@@ -102,6 +103,22 @@ export const deleteOneDoc = (Model: any) =>
 
 export const updateOneDoc = (Model: any) =>
   expressAsyncHandler(async (req: Request, res: Response) => {
+    const { name } = req.body;
+
+    const doc = await Model.findById(req.params.id);
+    if (!doc) throw new HTTP_Error("No document found with that ID", NOT_FOUND);
+
+    if (name) {
+      const existingDoc = await Model.findOne({ name });
+
+      if (existingDoc && existingDoc.id !== req.params.id) {
+        throw new HTTP_Error(
+          `The name "${name}" already exists in ${Model.modelName}`,
+          CONFLICT
+        );
+      }
+    }
+
     const updatedDoc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,

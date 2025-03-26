@@ -5,6 +5,14 @@ import {
   addDepartmentService,
   massDepartmentCreationService,
 } from "../service/departmnetService";
+import Department from "../model/departmentModel";
+import {
+  fetchDocsByPagination,
+  fetchDocs,
+  fetchOneDoc,
+  updateOneDoc,
+  deleteOneDoc,
+} from "../service/crudHandlerFactory";
 
 /**
  *  @description Create all of the organization's department
@@ -41,3 +49,13 @@ export const addDepartment = asyncHandler(async (req, res) => {
     throw new HTTP_Error("Department not created", INTERNAL_SERVER_ERROR);
   }
 });
+
+export const getFilteredDepartments = fetchDocsByPagination(Department);
+
+export const getDepartments = fetchDocs(Department);
+
+export const getDepartmentById = fetchOneDoc(Department);
+
+export const updateDepartment = updateOneDoc(Department);
+
+export const deleteDepartment = deleteOneDoc(Department);

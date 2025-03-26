@@ -42,6 +42,15 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ): Response | void => {
+  
+  if (err.name === "CastError" && err.kind === "ObjectId") {
+    return res.status(NOT_FOUND).json({
+      success: false,
+      message: "Resource Not Found",
+      stack: NODE_ENV === "development" ? err.stack : null,
+    });
+  }
+
   if (err instanceof HTTP_Error) {
     return res.status(err.statusCode).json({
       success: false,
