@@ -25,3 +25,11 @@ export interface IDepartment extends Document {
   positions: string[];
   supervisor: mongoose.Schema.Types.ObjectId;
 }
+
+export interface IFile extends Document {
+  documentType: string;
+  employee: mongoose.Schema.Types.ObjectId | string | null;
+  mimetype: string;
+  name: string;
+  path: string;
+}

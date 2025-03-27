@@ -7,6 +7,7 @@ import cors from "cors";
 
 import userRoutes from "./routes/userRoutes";
 import departmentRoutes from "./routes/departmentRoutes";
+import fileRoutes from "./routes/fileRoutes";
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
 import { protect, routeAccess } from "./middleware/authMiddleware";
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
 app.use("/api/departments", protect, routeAccess(["admin"]), departmentRoutes);
+app.use("/api/files", protect, routeAccess(["general"]), fileRoutes);
 
 app.use(notFound);
 app.use(errorHandler as unknown as express.ErrorRequestHandler);

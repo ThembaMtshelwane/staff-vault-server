@@ -1,6 +1,5 @@
-import mongoose, { Schema, ObjectId, Types, Model } from "mongoose";
+import mongoose, { Schema, Model } from "mongoose";
 import { IDepartment } from "../detinitions";
-import { timeStamp } from "console";
 
 const departmentSchema: Schema<IDepartment> = new Schema(
   {
