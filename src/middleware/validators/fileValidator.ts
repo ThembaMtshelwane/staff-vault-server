@@ -1,5 +1,5 @@
 import expressAsyncHandler from "express-async-handler";
-import { uploadFileSchema } from "../../schemas/fileSchema";
+import { fileParamsSchema, uploadFileSchema } from "../../schemas/fileSchema";
 import File from "../../model/fileModel";
 
 export const uploadFileValidator = expressAsyncHandler(
@@ -25,3 +25,12 @@ export const uploadFileValidator = expressAsyncHandler(
     next();
   }
 );
+
+export const downloadValidator = expressAsyncHandler(async (req, res, next) => {
+  const result = fileParamsSchema.safeParse(req.params.filename);
+  if (!result.success) {
+    return next(result.error);
+  }
+  req.params.filename = result.data;
+  next();
+});

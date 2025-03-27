@@ -22,3 +22,7 @@ export const uploadFileSchema = z.object({
   }),
   documentType: z.string().min(1, "Document type is required"),
 });
+
+export const fileParamsSchema = z
+  .string()
+  .min(1, { message: "Must have a file name" });

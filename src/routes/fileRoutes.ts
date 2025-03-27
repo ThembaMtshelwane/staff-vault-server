@@ -1,8 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import { upload } from "../config/db";
-import { uploadFile } from "../controllers/fileContoller";
-import { uploadFileValidator } from "../middleware/validators/fileValidator";
+import { downloadFile, uploadFile } from "../controllers/fileContoller";
+import {
+  downloadValidator,
+  uploadFileValidator,
+} from "../middleware/validators/fileValidator";
 
 dotenv.config();
 const fileRoutes = express.Router();
@@ -14,5 +17,7 @@ fileRoutes.post(
   uploadFile
 );
 
+// Download endpoint
+fileRoutes.get("/download/:filename", downloadValidator, downloadFile);
 
 export default fileRoutes;

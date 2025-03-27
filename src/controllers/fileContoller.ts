@@ -1,7 +1,9 @@
 import expressAsyncHandler from "express-async-handler";
 import { fetchDocs } from "../service/crudHandlerFactory";
-import { fileUploadService } from "../service/fileService";
-import { Request, Response } from "express";
+import { fileDownloadService, fileUploadService } from "../service/fileService";
+import { NextFunction, Request, Response } from "express";
+import HTTP_Error from "../utils/httpError";
+import { NOT_FOUND } from "../constants/http.codes";
 
 /**
  * Uploads a file to GridFS and stores its metadata.
@@ -25,10 +27,20 @@ export const uploadFile = expressAsyncHandler(
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  */
-// export const downloadFile = expressAsyncHandler(async (req, res) => {
-//   const { fullPath, filename } = fileDownloadService(req.params);
-//   res.download(fullPath, filename);
-// });
+export const downloadFile = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { fullPath, filename } = await fileDownloadService(
+      req.params.filename
+    );
+
+    if (!fullPath || !filename) {
+      res.status(404);
+      throw new HTTP_Error("File not found", NOT_FOUND);
+    }
+
+    res.download(fullPath, filename);
+  }
+);
 
 /**
  * Retrieves all files from the database.
