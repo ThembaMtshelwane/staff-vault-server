@@ -8,7 +8,11 @@ import {
   massDepartmentCreation,
   updateDepartment,
 } from "../controllers/departmentController";
-import { validateMassDepartmentCreation } from "../middleware/validators/departmentValidator";
+import {
+  validateAddDepartment,
+  validateMassDepartmentCreation,
+  validateUpdateDepartment,
+} from "../middleware/validators/departmentValidator";
 import { validateModelID } from "../middleware/validators/genericValidators";
 
 const router = express.Router();
@@ -20,11 +24,11 @@ router
 
 router.get("/filter", getFilteredDepartments);
 
-router.post("/add", addDepartment);
+router.post("/add", validateAddDepartment, addDepartment);
 router
   .route("/:id")
   .get(validateModelID, getDepartmentById)
-  .put(validateModelID, updateDepartment)
+  .put(validateModelID, validateUpdateDepartment, updateDepartment)
   .delete(validateModelID, deleteDepartment);
 
 export default router;
