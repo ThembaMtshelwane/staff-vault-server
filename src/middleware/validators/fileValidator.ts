@@ -1,5 +1,9 @@
 import expressAsyncHandler from "express-async-handler";
-import { fileParamsSchema, uploadFileSchema } from "../../schemas/fileSchema";
+import {
+  deleteFileSchema,
+  fileParamsSchema,
+  uploadFileSchema,
+} from "../../schemas/fileSchema";
 import File from "../../model/fileModel";
 
 export const uploadFileValidator = expressAsyncHandler(
@@ -34,3 +38,17 @@ export const downloadValidator = expressAsyncHandler(async (req, res, next) => {
   req.params.filename = result.data;
   next();
 });
+
+export const deleteFileValidator = expressAsyncHandler(
+  async (req, res, next) => {
+    const { filename, documentType } = req.params;
+    const result = deleteFileSchema.safeParse({ filename, documentType });
+    if (!result.success) {
+      return next(result.error);
+    }
+    console.log("result data ", result.data);
+
+    req.params = result.data;
+    next();
+  }
+);

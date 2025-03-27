@@ -41,3 +41,34 @@ export const fileDownloadService = async (filename: string) => {
 
   return { fullPath, filename };
 };
+
+export const getFilteredFilesService = async (documentType: string) => {
+  const files = await File.find({ documentType }).exec();
+
+  if (!files) {
+    throw new HTTP_Error("HTTP_Error fetching file", INTERNAL_SERVER_ERROR);
+  }
+
+  return { files, documentType };
+};
+
+export const fileDeleteService = async (
+  filename: string,
+  documentType: string
+) => {
+  const fileExists = await File.findOne({
+    name: filename,
+    documentType,
+  });
+
+  if (!fileExists) {
+    throw new HTTP_Error("No file found", NOT_FOUND);
+  }
+
+  const file = await File.findByIdAndDelete(fileExists._id);
+
+  if (!file) {
+    throw new HTTP_Error("Error deleting file", INTERNAL_SERVER_ERROR);
+  }
+  return file;
+};

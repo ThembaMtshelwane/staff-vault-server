@@ -26,3 +26,8 @@ export const uploadFileSchema = z.object({
 export const fileParamsSchema = z
   .string()
   .min(1, { message: "Must have a file name" });
+
+export const deleteFileSchema = z.object({
+  filename: fileParamsSchema,
+  documentType: z.string().min(1, { message: "Must have a document type" }),
+});
