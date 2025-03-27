@@ -1,5 +1,5 @@
 {
-  "name": "express-ts-server",
+  "name": "staff-vault-server",
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
