@@ -32,7 +32,7 @@ router.get("/filter", routeAccess("admin", "general"), getFilteredDepartments);
 router.post("/add", routeAccess("admin"), validateAddDepartment, addDepartment);
 router
   .route("/:id")
-  .get(routeAccess("admin", "general"), validateModelID, getDepartmentById)
+  .get(routeAccess("general", "admin"), validateModelID, getDepartmentById)
   .put(
     routeAccess("admin"),
     validateModelID,
