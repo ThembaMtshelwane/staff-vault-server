@@ -30,6 +30,7 @@ export const protect = expressAsyncHandler(
       }
 
       req.user = user;
+      console.log(" protected  user role  ", req.user?.role);
       next();
     } catch (error) {
       throw new HTTP_Error("Not authorized, invalid token", UNAUTHORIZED);
