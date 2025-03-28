@@ -38,7 +38,7 @@ export const protect = expressAsyncHandler(
   }
 );
 
-export const routeAccess = (roles: UserRole[]) => {
+export const routeAccess = (...roles: UserRole[]) => {
   return expressAsyncHandler(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
       if (req.user && roles.includes(req.user.role)) {
