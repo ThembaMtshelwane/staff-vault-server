@@ -49,6 +49,8 @@ router.post(
   validateRegisterAdmin,
   createAdminUser
 );
+
+
 router.post("/login", validateLogin, loginUser);
 router.post(
   "/logout",
@@ -56,6 +58,7 @@ router.post(
   routeAccess("admin", "general", "super_admin"),
   logoutUser
 );
+
 router.post(
   "/add-user",
   protect,
