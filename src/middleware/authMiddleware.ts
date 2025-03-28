@@ -41,6 +41,10 @@ export const protect = expressAsyncHandler(
 export const routeAccess = (...roles: UserRole[]) => {
   return expressAsyncHandler(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
+      console.log("roles  ", roles);
+      console.log("logged in user role  ", roles);
+      console.log("req.user && roles.includes(req.user.role)  ", req.user && roles.includes(req.user.role));
+
       if (req.user && roles.includes(req.user.role)) {
         next();
       } else {
