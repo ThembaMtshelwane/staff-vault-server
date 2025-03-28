@@ -14,7 +14,7 @@ import { protect, routeAccess } from "./middleware/authMiddleware";
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 8000;
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());

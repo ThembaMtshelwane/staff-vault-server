@@ -25,7 +25,7 @@ router
     validateMassDepartmentCreation,
     massDepartmentCreation
   )
-  .get(routeAccess(["admin"]), getDepartments);
+  .get(routeAccess(["admin", "general"]), getDepartments);
 
 router.get(
   "/filter",
