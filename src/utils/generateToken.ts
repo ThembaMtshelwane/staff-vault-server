@@ -3,6 +3,7 @@ import { JWT_SECRET, NODE_ENV } from "../constants/env.const";
 import { Response } from "express";
 import mongoose from "mongoose";
 
+//TODO: update to add refresh token 
 const generateToken = (
   res: Response,
   userID: mongoose.Schema.Types.ObjectId
