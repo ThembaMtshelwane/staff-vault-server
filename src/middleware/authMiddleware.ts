@@ -18,9 +18,6 @@ export const protect = expressAsyncHandler(
     if (!token) {
       throw new HTTP_Error("Not authorized, no token", UNAUTHORIZED);
     }
-
-    console.log(token);
-
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
