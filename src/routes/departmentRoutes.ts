@@ -14,21 +14,40 @@ import {
   validateUpdateDepartment,
 } from "../middleware/validators/departmentValidator";
 import { validateModelID } from "../middleware/validators/genericValidators";
+import { routeAccess } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
 router
   .route("/")
-  .post(validateMassDepartmentCreation, massDepartmentCreation)
-  .get(getDepartments);
+  .post(
+    routeAccess(["admin"]),
+    validateMassDepartmentCreation,
+    massDepartmentCreation
+  )
+  .get(routeAccess(["admin"]), getDepartments);
 
-router.get("/filter", getFilteredDepartments);
+router.get(
+  "/filter",
+  routeAccess(["admin", "general"]),
+  getFilteredDepartments
+);
 
-router.post("/add", validateAddDepartment, addDepartment);
+router.post(
+  "/add",
+  routeAccess(["admin"]),
+  validateAddDepartment,
+  addDepartment
+);
 router
   .route("/:id")
-  .get(validateModelID, getDepartmentById)
-  .put(validateModelID, validateUpdateDepartment, updateDepartment)
-  .delete(validateModelID, deleteDepartment);
+  .get(routeAccess(["admin", "general"]), validateModelID, getDepartmentById)
+  .put(
+    routeAccess(["admin"]),
+    validateModelID,
+    validateUpdateDepartment,
+    updateDepartment
+  )
+  .delete(routeAccess(["admin"]), validateModelID, deleteDepartment);
 
 export default router;
