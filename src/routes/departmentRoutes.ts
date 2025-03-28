@@ -22,23 +22,23 @@ router
   .route("/")
   .post(
     protect,
-    routeAccess("admin"),
+    routeAccess(["admin"]),
     validateMassDepartmentCreation,
     massDepartmentCreation
   )
-  .get(protect, routeAccess("admin", "general"), getDepartments);
+  .get(protect, routeAccess(["admin", "general"]), getDepartments);
 
 router.get(
   "/filter",
   protect,
-  routeAccess("admin", "general"),
+  routeAccess(["admin", "general"]),
   getFilteredDepartments
 );
 
 router.post(
   "/add",
   protect,
-  routeAccess("admin"),
+  routeAccess(["admin"]),
   validateAddDepartment,
   addDepartment
 );
@@ -46,17 +46,17 @@ router
   .route("/:id")
   .get(
     protect,
-    routeAccess("general", "admin"),
+    routeAccess(["general", "admin"]),
     validateModelID,
     getDepartmentById
   )
   .put(
     protect,
-    routeAccess("admin"),
+    routeAccess(["admin"]),
     validateModelID,
     validateUpdateDepartment,
     updateDepartment
   )
-  .delete(protect, routeAccess("admin"), validateModelID, deleteDepartment);
+  .delete(protect, routeAccess(["admin"]), validateModelID, deleteDepartment);
 
 export default router;

@@ -28,24 +28,24 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(protect, routeAccess("admin", "general"), fetchAllUsers)
+  .get(protect, routeAccess(["admin", "general"]), fetchAllUsers)
   .post(
     protect,
-    routeAccess("admin", "super_admin"),
+    routeAccess(["admin", "super_admin"]),
     validateRegisterAllUsers,
     registerAllUsers
   );
 router.get(
   "/filter",
   protect,
-  routeAccess("admin", "general"),
+  routeAccess(["admin", "general"]),
   // validateFetchFilteredDocs,
   fetchFilteredUsers
 );
 router.post(
   "/admin",
   protect,
-  routeAccess("super_admin"),
+  routeAccess(["super_admin"]),
   validateRegisterAdmin,
   createAdminUser
 );
@@ -55,22 +55,22 @@ router.post("/login", validateLogin, loginUser);
 router.post(
   "/logout",
   protect,
-  routeAccess("admin", "general", "super_admin"),
+  routeAccess(["admin", "general", "super_admin"]),
   logoutUser
 );
 
 router.post(
   "/add-user",
   protect,
-  routeAccess("admin"),
+  routeAccess(["admin"]),
   validateAddUser,
   addUser
 );
 router.get("/profile", protect, getUserProfile);
 router
   .route("/:id")
-  .get(protect, routeAccess("admin", "general"), validateModelID, fetchUserById)
-  .delete(protect, routeAccess("admin"), validateModelID, deleteUser)
-  .put(protect, routeAccess("general"), validateModelID, updateUser);
+  .get(protect, routeAccess(["admin", "general"]), validateModelID, fetchUserById)
+  .delete(protect, routeAccess(["admin"]), validateModelID, deleteUser)
+  .put(protect, routeAccess(["general"]), validateModelID, updateUser);
 
 export default router;
