@@ -19,6 +19,8 @@ export const protect = expressAsyncHandler(
       throw new HTTP_Error("Not authorized, no token", UNAUTHORIZED);
     }
 
+    console.log(token);
+
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
@@ -42,8 +44,11 @@ export const routeAccess = (...roles: UserRole[]) => {
   return expressAsyncHandler(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
       console.log("roles  ", roles);
-      console.log("logged in user role  ", roles);
-      console.log("req.user && roles.includes(req.user.role)  ", req.user && roles.includes(req.user.role));
+      console.log("logged in user role  ", req.user?.role);
+      console.log(
+        "req.user && roles.includes(req.user.role)  ",
+        req.user && roles.includes(req.user.role)
+      );
 
       if (req.user && roles.includes(req.user.role)) {
         next();
