@@ -3,7 +3,7 @@ import { JWT_SECRET, NODE_ENV } from "../constants/env.const";
 import { Response } from "express";
 import mongoose from "mongoose";
 
-//TODO: update to add refresh token 
+//TODO: update to add refresh token
 const generateToken = (
   res: Response,
   userID: mongoose.Schema.Types.ObjectId
@@ -15,7 +15,7 @@ const generateToken = (
   res.cookie("jwt", token, {
     httpOnly: true,
     secure: NODE_ENV !== " development",
-    sameSite: "strict",
+    sameSite: "none",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 };
