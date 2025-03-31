@@ -1,7 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import { NextFunction, Request, Response } from "express";
 import HTTP_Error from "../utils/httpError";
-import { NOT_FOUND } from "../constants/http.codes";
+import { INTERNAL_SERVER_ERROR, NOT_FOUND, OK } from "../constants/http.codes";
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from "../config/superbaseClient";
 import { FileMetadata, IUser } from "../detinitions";
@@ -133,16 +133,31 @@ export const getFilteredFiles = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const documentType = req.query.documentType as string;
 
-    const { data: files, error } = await supabase
+    if (!documentType) {
+      throw new HTTP_Error(`documentType is required`, INTERNAL_SERVER_ERROR);
+    }
+
+    const { data: files, error } = (await supabase
       .from(FILES_TABLE)
       .select("*")
-      .eq("documentType", documentType);
+      .eq("documentType", documentType)) as {
+      data: FileMetadata[];
+      error: any;
+    };
 
     if (error) {
       throw new HTTP_Error(
         `Failed to fetch filtered files: ${error.message}`,
-        500
+        INTERNAL_SERVER_ERROR
       );
+    }
+
+    if (!files || files.length === 0) {
+      res.status(OK).json({
+        success: true,
+        message: `No ${documentType} files found`,
+        data: [],
+      });
     }
 
     res.status(200).json({
