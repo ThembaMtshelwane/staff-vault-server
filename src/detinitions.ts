@@ -3,6 +3,7 @@ import mongoose, { Document } from "mongoose";
 export type UserRole = "general" | "admin" | "super_admin";
 
 export interface IUser extends Document {
+  // _id: mongoose.Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
   position: string;
@@ -41,4 +42,5 @@ export interface FileMetadata {
   path: string;
   uploadedAt: string;
   metadata?: any;
+  userId: string;
 }

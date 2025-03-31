@@ -1,11 +1,10 @@
-import { createClient } from "@supabase/supabase-js";
 import expressAsyncHandler from "express-async-handler";
 import { NextFunction, Request, Response } from "express";
 import HTTP_Error from "../utils/httpError";
 import { NOT_FOUND } from "../constants/http.codes";
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from "../config/superbaseClient";
-import { FileMetadata } from "../detinitions";
+import { FileMetadata, IUser } from "../detinitions";
 
 const BUCKET_NAME = process.env.SUPABASE_BUCKET_NAME || "files";
 const FILES_TABLE = "files_metadata";
@@ -15,8 +14,13 @@ const FILES_TABLE = "files_metadata";
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  */
+
+export interface AuthRequest extends Request {
+  user?: IUser;
+}
+
 export const uploadFile = expressAsyncHandler(
-  async (req: Request, res: Response) => {
+  async (req: AuthRequest, res: Response) => {
     if (!req.file) {
       throw new HTTP_Error("No file uploaded", 400);
     }
@@ -26,7 +30,6 @@ export const uploadFile = expressAsyncHandler(
     const fileId = uuidv4();
     const filename = `${fileId}-${originalname}`; // Generate unique filename
     const filePath = `${documentType}/${filename}`;
-    console.log("Buffer size:", buffer);
 
     const { error: uploadError } = await supabase.storage
       .from(BUCKET_NAME)
@@ -44,6 +47,7 @@ export const uploadFile = expressAsyncHandler(
       documentType,
       path: filePath,
       uploadedAt: new Date().toISOString(),
+      userId: req.user?.id,
     };
 
     const { error: dbError } = await supabase
