@@ -28,8 +28,8 @@ export const uploadFile = expressAsyncHandler(
     const { originalname, buffer, mimetype } = req.file;
     const { documentType, ...metadata } = req.body;
     const fileId = uuidv4();
-    const filename = `${fileId}-${originalname}`; // Generate unique filename
-    const filePath = `${documentType}/${filename}`;
+    // const filename = `${fileId}-${originalname}`; // Generate unique filename
+    const filePath = `${documentType}/${originalname}`;
 
     const { error: uploadError } = await supabase.storage
       .from(BUCKET_NAME)
@@ -87,7 +87,7 @@ export const downloadFile = expressAsyncHandler(
       .single();
 
     if (metadataError || !fileMetadata) {
-      res.status(404);
+      // res.status(404);
       throw new HTTP_Error("File metadata not found", NOT_FOUND);
     }
 
@@ -96,11 +96,11 @@ export const downloadFile = expressAsyncHandler(
       .download(fileMetadata.path);
 
     if (downloadError || !fileData) {
-      res.status(404);
+      // res.status(404);
       throw new HTTP_Error("File not found in storage", NOT_FOUND);
     }
 
-    res.setHeader("Content-Type", "application/octet-stream"); // Force download
+    res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
       `attachment; filename=${fileMetadata.filename}`
@@ -167,7 +167,7 @@ export const deleteFile = expressAsyncHandler(
       .single();
 
     if (metadataError || !fileMetadata) {
-      res.status(404);
+      // res.status(404);
       throw new HTTP_Error("File metadata not found", NOT_FOUND);
     }
 
