@@ -166,7 +166,6 @@ export const deleteFile = expressAsyncHandler(
       .single();
 
     if (metadataError || !fileMetadata) {
-      // res.status(404);
       throw new HTTP_Error("File metadata not found", NOT_FOUND);
     }
 
