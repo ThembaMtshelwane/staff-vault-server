@@ -38,7 +38,7 @@ export const protect = expressAsyncHandler(
   }
 );
 
-export const routeAccess = (roles: string[]) => {
+export const routeAccess = (roles: UserRole[]) => {
   return expressAsyncHandler(
     (req: AuthRequest, res: Response, next: NextFunction) => {
       console.log("roles *** ", roles);

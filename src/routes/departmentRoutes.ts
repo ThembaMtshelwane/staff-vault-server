@@ -21,7 +21,6 @@ const router = express.Router();
 router
   .route("/")
   .post(
-    protect,
     routeAccess(["admin"]),
     validateMassDepartmentCreation,
     massDepartmentCreation
@@ -30,28 +29,26 @@ router
 
 router.get(
   "/filter",
-  protect,
   routeAccess(["admin", "general"]),
   getFilteredDepartments
 );
 
 router.post(
   "/add",
-  protect,
   routeAccess(["admin"]),
   validateAddDepartment,
   addDepartment
 );
+
 router
   .route("/:id")
-  .get(getDepartmentById)
+  .get(routeAccess(["general"]), validateModelID, getDepartmentById)
   .put(
-    protect,
     routeAccess(["admin"]),
     validateModelID,
     validateUpdateDepartment,
     updateDepartment
   )
-  .delete(protect, routeAccess(["admin"]), validateModelID, deleteDepartment);
+  .delete(routeAccess(["admin"]), validateModelID, deleteDepartment);
 
 export default router;

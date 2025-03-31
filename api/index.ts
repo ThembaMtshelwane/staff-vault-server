@@ -22,7 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
-app.use("/api/departments", protect, routeAccess(["admin"]), departmentRoutes);
+app.use(
+  "/api/departments",
+  protect,
+  routeAccess(["admin", "general"]),
+  departmentRoutes
+);
 app.use("/api/files", protect, routeAccess(["general"]), fileRoutes);
 
 app.use(notFound);
