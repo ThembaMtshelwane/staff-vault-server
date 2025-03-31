@@ -16,17 +16,18 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 9000;
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://staff-vault.vercel.app"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
-app.use(
-  "/api/departments",
-  protect,
-  departmentRoutes
-);
+app.use("/api/departments", protect, departmentRoutes);
 app.use("/api/files", protect, routeAccess(["general"]), fileRoutes);
 
 app.use(notFound);
