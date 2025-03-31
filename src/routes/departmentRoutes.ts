@@ -44,7 +44,7 @@ router.post(
 );
 router
   .route("/:id")
-  .get(protect, routeAccess(["general"]), validateModelID, getDepartmentById)
+  .get(getDepartmentById)
   .put(
     protect,
     routeAccess(["admin"]),
