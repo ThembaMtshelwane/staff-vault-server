@@ -25,7 +25,6 @@ app.use("/api/users", userRoutes);
 app.use(
   "/api/departments",
   protect,
-  routeAccess(["admin", "general"]),
   departmentRoutes
 );
 app.use("/api/files", protect, routeAccess(["general"]), fileRoutes);
