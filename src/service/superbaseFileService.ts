@@ -121,7 +121,6 @@ export const getAllFiles = expressAsyncHandler(
     if (error) {
       throw new HTTP_Error(`Failed to fetch files: ${error.message}`, 500);
     }
-
     res.status(200).json({
       success: true,
       message: `${data.length} files returned`,

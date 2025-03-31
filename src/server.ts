@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
-app.use("/api/departments", departmentRoutes);
+app.use("/api/departments", protect, departmentRoutes);
 app.use("/api/files", protect, routeAccess(["general"]), fileRoutes);
 
 app.use(notFound);

@@ -14,7 +14,7 @@ import {
   validateUpdateDepartment,
 } from "../middleware/validators/departmentValidator";
 import { validateModelID } from "../middleware/validators/genericValidators";
-import { protect, routeAccess } from "../middleware/authMiddleware";
+import { routeAccess } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router
     validateMassDepartmentCreation,
     massDepartmentCreation
   )
-  .get(protect, routeAccess(["admin", "general"]), getDepartments);
+  .get(routeAccess(["admin", "general"]), getDepartments);
 
 router.get(
   "/filter",
