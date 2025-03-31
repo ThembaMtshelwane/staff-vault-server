@@ -3,18 +3,16 @@ import dotenv from "dotenv";
 import { upload } from "../config/db";
 import {
   deleteFile,
-  downloadFile,
+  // downloadFile,
   getAllFiles,
   getFilteredFiles,
-  uploadFile,
 } from "../controllers/fileContoller";
 import {
   deleteFileValidator,
   downloadValidator,
   uploadFileValidator,
 } from "../middleware/validators/fileValidator";
-import expressAsyncHandler from "express-async-handler";
-import { fileDeleteService } from "../service/fileService";
+import { downloadFile, uploadFile } from "../service/superbaseFileService";
 
 dotenv.config();
 const fileRoutes = express.Router();
@@ -22,7 +20,7 @@ const fileRoutes = express.Router();
 fileRoutes.post(
   "/upload",
   upload.single("file"),
-  uploadFileValidator,
+  // uploadFileValidator,
   uploadFile
 );
 

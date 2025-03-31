@@ -33,3 +33,12 @@ export interface IFile extends Document {
   name: string;
   path: string;
 }
+
+export interface FileMetadata {
+  id: string;
+  filename: string;
+  documentType: string;
+  path: string;
+  uploadedAt: string;
+  metadata?: any;
+}

@@ -4,10 +4,11 @@ import {
   fileParamsSchema,
   uploadFileSchema,
 } from "../../schemas/fileSchema";
-import File from "../../model/fileModel";
+import { NextFunction, Request, Response } from "express";
+import { BAD_REQUEST } from "../../constants/http.codes";
 
 export const uploadFileValidator = expressAsyncHandler(
-  async (req, res, next) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const result = uploadFileSchema.safeParse({
       file: req.file,
       employee: req.body.employee,
@@ -15,7 +16,7 @@ export const uploadFileValidator = expressAsyncHandler(
     });
 
     if (!result.success) {
-      res.status(400);
+      res.status(BAD_REQUEST);
       return next(result.error);
     }
     req.file!.originalname = result.data.file.originalname;
@@ -30,24 +31,24 @@ export const uploadFileValidator = expressAsyncHandler(
   }
 );
 
-export const downloadValidator = expressAsyncHandler(async (req, res, next) => {
-  const result = fileParamsSchema.safeParse(req.params.filename);
-  if (!result.success) {
-    return next(result.error);
+export const downloadValidator = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = fileParamsSchema.safeParse(req.params.filename);
+    if (!result.success) {
+      return next(result.error);
+    }
+    req.params.filename = result.data;
+    next();
   }
-  req.params.filename = result.data;
-  next();
-});
+);
 
 export const deleteFileValidator = expressAsyncHandler(
-  async (req, res, next) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { filename, documentType } = req.params;
     const result = deleteFileSchema.safeParse({ filename, documentType });
     if (!result.success) {
       return next(result.error);
     }
-    console.log("result data ", result.data);
-
     req.params = result.data;
     next();
   }

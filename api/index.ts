@@ -2,19 +2,19 @@ import dotenv from "dotenv";
 dotenv.config();
 import cookieParser from "cookie-parser";
 import express from "express";
-
-import cors from "cors";
 import connectDB from "../src/config/db";
-import { protect, routeAccess } from "../src/middleware/authMiddleware";
-import { notFound, errorHandler } from "../src/middleware/errorMiddleware";
+import cors from "cors";
+
+import userRoutes from "../src/routes/userRoutes";
 import departmentRoutes from "../src/routes/departmentRoutes";
 import fileRoutes from "../src/routes/fileRoutes";
-import userRoutes from "../src/routes/userRoutes";
+import { errorHandler, notFound } from "../src/middleware/errorMiddleware";
+import { protect, routeAccess } from "../src/middleware/authMiddleware";
 
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 8000;
 
 app.use(
   cors({

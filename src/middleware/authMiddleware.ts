@@ -30,7 +30,6 @@ export const protect = expressAsyncHandler(
       }
 
       req.user = user;
-      console.log(" protected  user role  ", req.user?.role);
       next();
     } catch (error) {
       throw new HTTP_Error("Not authorized, invalid token", UNAUTHORIZED);
@@ -41,13 +40,6 @@ export const protect = expressAsyncHandler(
 export const routeAccess = (roles: UserRole[]) => {
   return expressAsyncHandler(
     (req: AuthRequest, res: Response, next: NextFunction) => {
-      console.log("roles *** ", roles);
-      console.log("logged in user role  ", req.user?.role);
-      console.log(
-        "req.user && roles.includes(req.user.role)  ",
-        req.user && roles.includes(req.user.role)
-      );
-
       if (req.user && roles.includes(req.user.role)) {
         next();
       } else {
