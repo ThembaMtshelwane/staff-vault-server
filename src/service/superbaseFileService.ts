@@ -87,7 +87,6 @@ export const downloadFile = expressAsyncHandler(
       .single();
 
     if (metadataError || !fileMetadata) {
-      // res.status(404);
       throw new HTTP_Error("File metadata not found", NOT_FOUND);
     }
 
@@ -96,7 +95,6 @@ export const downloadFile = expressAsyncHandler(
       .download(fileMetadata.path);
 
     if (downloadError || !fileData) {
-      // res.status(404);
       throw new HTTP_Error("File not found in storage", NOT_FOUND);
     }
 
