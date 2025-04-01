@@ -1,7 +1,5 @@
 import mongoose, { Connection } from "mongoose";
-import multer from "multer";
-import fs from "fs";
-import path from "path";
+import multer from "multer";;
 import { MONGO_URI } from "../constants/env.const";
 
 const connectDB = async () => {
