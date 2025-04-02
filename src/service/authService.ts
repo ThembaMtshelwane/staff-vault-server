@@ -4,6 +4,7 @@ import { IDepartmentBasicInfo, IUser } from "../detinitions";
 import User from "../model/userModel";
 import HTTP_Error from "../utils/httpError";
 import { removeDuplicates } from "../utils/utils";
+import crypto from "crypto";
 
 interface IUserCredentials {
   email: string;
@@ -40,10 +41,13 @@ export const addUserService = async (userData: IUserData) => {
     );
   }
 
+  const jwt_secret = crypto.randomBytes(32).toString("hex");
+
   const user = {
     firstName: firstName || "Not Available",
     lastName: lastName || "Not Available",
     email,
+    jwt_secret,
   };
 
   if (role === "admin") {

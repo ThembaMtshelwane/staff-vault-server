@@ -8,18 +8,24 @@ import {
 import { NextFunction, Request, Response } from "express";
 import { BAD_REQUEST } from "../../constants/http.codes";
 
-
-
 export const validateAddUser = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { firstName, lastName, email, position, department, password } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      position,
+      supervisor,
+      department,
+      password,
+    } = req.body;
 
     const result = addUserSchema.safeParse({
       firstName,
       lastName,
       email,
       position,
+      supervisor,
       department,
       password,
     });

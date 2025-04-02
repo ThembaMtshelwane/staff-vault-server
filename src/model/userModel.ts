@@ -13,10 +13,32 @@ const userSchema: Schema<IUser> = new Schema(
       default: null,
     },
     supervisor: { type: Schema.Types.ObjectId, ref: "User", default: null },
-    email: { type: String, required: true },
-    password: { type: String, default: process.env.USER_PASSWORD || "" },
-    role: { type: String, default: "general" },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Enter a password"],
+      default: process.env.USER_PASSWORD || "",
+    },
+    role: {
+      type: String,
+      emum: ["general", "admin", "super_admin"],
+      default: "general",
+    },
     permissions: { type: [String], default: [] },
+    refreshToken: {
+      type: String,
+      default: null,
+    },
+    jwt_secret: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
