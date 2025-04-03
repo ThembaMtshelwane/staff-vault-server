@@ -1,23 +1,56 @@
-import jwt from "jsonwebtoken";
-import { JWT_SECRET, NODE_ENV } from "../constants/env.const";
-import { Response } from "express";
-import mongoose from "mongoose";
+import { NODE_ENV } from "../constants/env.const";
+import { CookieOptions, Response } from "express";
+import generateAccessToken from "./generateAccessToken";
+import { IUser } from "../detinitions";
+import generateRefreshToken from "./generateRefreshToken";
+import { after90Days } from "../constants/date.consts";
 
-//TODO: update to add refresh token
-const generateToken = (
-  res: Response,
-  userID: mongoose.Schema.Types.ObjectId
-) => {
-  const token = jwt.sign({ userID }, JWT_SECRET, {
-    expiresIn: "30d",
-  });
+const generateToken = async (res: Response, user: IUser) => {
+  try {
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
 
-  res.cookie("jwt", token, {
-    httpOnly: true,
-    secure: NODE_ENV !== " development",
-    sameSite: "none",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    setAuthCookies(res, accessToken, refreshToken);
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    console.error("Error generating tokens:", error);
+    throw new Error("Failed to generate tokens");
+  }
 };
+
+const setAuthCookies = (
+  res: Response,
+  accessToken: string,
+  refreshToken: string
+) => {
+  console.log(res.headersSent);
+
+  if (!res.headersSent) {
+    res.cookie("accessToken", accessToken, accessCookieOptions());
+    res.cookie("refreshToken", refreshToken, refreshCookieOptions());
+  } else {
+    console.error("Headers already sent; cannot set cookies.");
+  }
+};
+
+const accessCookieOptions = (): CookieOptions => ({
+  httpOnly: true,
+  sameSite: "strict",
+  secure: NODE_ENV === "production",
+  expires: after90Days(),
+  path: "/api",
+});
+
+const refreshCookieOptions = (): CookieOptions => ({
+  httpOnly: true,
+  sameSite: "strict",
+  secure: NODE_ENV === "production",
+  expires: after90Days(),
+  path: "/api/refresh",
+});
 
 export default generateToken;

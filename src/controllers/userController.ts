@@ -35,7 +35,7 @@ export const loginUser = expressAsyncHandler(
     const user: IUser | null = await loginService(req.body);
 
     if (user) {
-      generateToken(res, user._id as ObjectId);
+      await generateToken(res, user);
       res.status(200).json({
         success: true,
         message: "User authenticated successfully",

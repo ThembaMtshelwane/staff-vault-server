@@ -5,34 +5,61 @@ import { JWT_SECRET } from "../constants/env.const";
 import { NextFunction, Request, Response } from "express";
 import { IUser, UserRole } from "../detinitions";
 import HTTP_Error from "../utils/httpError";
-import { FORBIDDEN, NOT_FOUND, UNAUTHORIZED } from "../constants/http.codes";
+import {
+  FORBIDDEN,
+  INTERNAL_SERVER_ERROR,
+  NOT_FOUND,
+  UNAUTHORIZED,
+} from "../constants/http.codes";
 
 interface AuthRequest extends Request {
   user?: IUser;
 }
 
+interface IDecoded extends JwtPayload {
+  id: unknown;
+}
+
 export const protect = expressAsyncHandler(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const token = req.cookies.jwt;
+    const accessToken = req.cookies.accessToken;
 
-    if (!token) {
-      throw new HTTP_Error("Not authorized, no token", UNAUTHORIZED);
+    if (!accessToken) {
+      return next(new HTTP_Error("Not authorized, no token", UNAUTHORIZED));
     }
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const decoded = jwt.decode(accessToken) as IDecoded;
 
-      const user: IUser = await User.findById(decoded.userID).select(
-        "-password"
+    if (!decoded || !decoded.id) {
+      next(
+        new HTTP_Error("Not authorized, invalid token structure", UNAUTHORIZED)
       );
+    }
 
-      if (!user) {
-        throw new HTTP_Error("Not authorized, user not found", NOT_FOUND);
-      }
+    const user = await User.findById(decoded.id).select("-password");
 
-      req.user = user;
-      next();
-    } catch (error) {
-      throw new HTTP_Error("Not authorized, invalid token", UNAUTHORIZED);
+    if (!user) {
+      next(new HTTP_Error("Not authorized, user not found", NOT_FOUND));
+    }
+
+    const currentJwtSecret = user?.jwt_secret;
+
+    if (!currentJwtSecret) {
+      next(
+        new HTTP_Error(
+          "Server error: User jwt_secret missing",
+          INTERNAL_SERVER_ERROR
+        )
+      );
+    }
+
+    try {
+      jwt.verify(accessToken, currentJwtSecret as string);
+      req.user = user as IUser; // Attach user to request object
+      next(); // Proceed to the next middleware or route handler
+    } catch (verificationError) {
+      return next(
+        new HTTP_Error("Not authorized, invalid token", UNAUTHORIZED)
+      );
     }
   }
 );

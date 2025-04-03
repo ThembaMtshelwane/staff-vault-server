@@ -44,8 +44,8 @@ router.get(
 );
 router.post(
   "/admin",
-  protect,
-  routeAccess(["super_admin"]),
+  // protect,
+  // routeAccess(["super_admin"]),
   validateRegisterAdmin,
   createAdminUser
 );
