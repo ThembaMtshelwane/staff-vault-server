@@ -82,10 +82,12 @@ export const massStaffRegistrationService = async (
       staffEmails.map(async (email) => {
         let user = await User.findOne({ email });
         if (!user) {
+          const jwt_secret = crypto.randomBytes(32).toString("hex");
           user = await User.create({
             email,
             permissions: ["modify_files", "modify_data"],
             password: USER_PASSWORD,
+            jwt_secret,
           });
           data.push(user);
         } else {
