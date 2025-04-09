@@ -63,7 +63,10 @@ export const addUser = expressAsyncHandler(
 export const registerAllUsers = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const staffEmails: string[] = req.body.staffEmails;
-    const { data, message } = await massStaffRegistrationService(staffEmails);
+    const { data, message } = await massStaffRegistrationService(
+      staffEmails,
+      res
+    );
 
     if (data) {
       res.status(201).json({

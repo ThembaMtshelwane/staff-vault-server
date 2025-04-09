@@ -1,7 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import expressAsyncHandler from "express-async-handler";
 import User from "../model/userModel";
-import { JWT_SECRET } from "../constants/env.const";
 import { NextFunction, Request, Response } from "express";
 import { IUser, UserRole } from "../detinitions";
 import HTTP_Error from "../utils/httpError";
