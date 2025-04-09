@@ -37,7 +37,6 @@ const userSchema: Schema<IUser> = new Schema(
     },
     jwt_secret: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }
