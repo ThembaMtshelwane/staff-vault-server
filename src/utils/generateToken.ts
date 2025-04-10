@@ -27,8 +27,6 @@ const setAuthCookies = (
   accessToken: string,
   refreshToken: string
 ) => {
-  console.log(res.headersSent);
-
   if (!res.headersSent) {
     res.cookie("accessToken", accessToken, accessCookieOptions());
     res.cookie("refreshToken", refreshToken, refreshCookieOptions());

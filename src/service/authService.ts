@@ -72,8 +72,7 @@ export const addUserService = async (userData: IUserData) => {
 };
 
 export const massStaffRegistrationService = async (
-  input: string[] | IDepartmentBasicInfo[],
-  res: Response
+  input: string[] | IDepartmentBasicInfo[]
 ) => {
   const { uniqueStrings: staffEmails, duplicates } = removeDuplicates(input);
   const errors: string[] = [];
@@ -83,9 +82,9 @@ export const massStaffRegistrationService = async (
   if (staffEmails && staffEmails.length) {
     await Promise.all(
       staffEmails.map(async (email) => {
-        let user = (await User.findOne({ email })) as IUser;
+        let user = await User.findOne({ email });
         if (!user) {
-          await generateToken(res, user);
+          // await generateToken(res, user);
           const jwt_secret = crypto.randomBytes(32).toString("hex");
           user = await User.create({
             email,
