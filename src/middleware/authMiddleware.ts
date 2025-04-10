@@ -24,11 +24,14 @@ export const protect = expressAsyncHandler(
     const accessToken = req.cookies.accessToken;
 
     if (!accessToken) {
+      console.log("Protect - Not authorized, no token");
+
       return next(new HTTP_Error("Not authorized, no token", UNAUTHORIZED));
     }
     const decoded = jwt.decode(accessToken) as IDecoded;
 
     if (!decoded || !decoded.id) {
+      console.log("Protect - Not authorized, invalid token structure");
       next(
         new HTTP_Error("Not authorized, invalid token structure", UNAUTHORIZED)
       );
@@ -37,6 +40,7 @@ export const protect = expressAsyncHandler(
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
+      console.log("Protect - Not authorized, user not found");
       next(new HTTP_Error("Not authorized, user not found", NOT_FOUND));
     }
 
