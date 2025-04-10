@@ -19,6 +19,7 @@ import {
 } from "../service/authService";
 import { IUser } from "../detinitions";
 import { ObjectId } from "mongoose";
+import { clearAuthCookies } from "../utils/authCookies";
 
 export interface AuthRequest extends Request {
   user?: IUser;
@@ -92,10 +93,7 @@ export const createAdminUser = expressAsyncHandler(
 
 export const logoutUser = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    res.cookie("jwt", "", {
-      httpOnly: true,
-      expires: new Date(0),
-    });
+    clearAuthCookies(res);
     res.status(200).json({
       success: true,
       message: "User logged out",
