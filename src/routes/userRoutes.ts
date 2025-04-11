@@ -50,11 +50,9 @@ router.post(
   createAdminUser
 );
 
-
 router.post("/login", validateLogin, loginUser);
 router.post(
   "/logout",
-  protect,
   routeAccess(["admin", "general", "super_admin"]),
   logoutUser
 );
@@ -69,7 +67,12 @@ router.post(
 router.get("/profile", protect, getUserProfile);
 router
   .route("/:id")
-  .get(protect, routeAccess(["admin", "general"]), validateModelID, fetchUserById)
+  .get(
+    protect,
+    routeAccess(["admin", "general"]),
+    validateModelID,
+    fetchUserById
+  )
   .delete(protect, routeAccess(["admin"]), validateModelID, deleteUser)
   .put(protect, routeAccess(["general"]), validateModelID, updateUser);
 
