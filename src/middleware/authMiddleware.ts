@@ -44,12 +44,12 @@ export const protect = expressAsyncHandler(
       next(new HTTP_Error("Not authorized, user not found", NOT_FOUND));
     }
 
-    const currentJwtSecret = user?.jwt_secret;
+    const currentJwtSecret = user?.access_token_secret_key;
 
     if (!currentJwtSecret) {
       next(
         new HTTP_Error(
-          "Server error: User jwt_secret missing",
+          "Server error: User access token secret key missing",
           INTERNAL_SERVER_ERROR
         )
       );

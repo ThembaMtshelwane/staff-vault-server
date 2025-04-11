@@ -13,7 +13,8 @@ export interface IUser extends Document {
   password: string;
   role: UserRole;
   permissions: string[];
-  jwt_secret: string;
+  access_token_secret_key: string;
+  refresh_token_secret_key: string;
   refreshToken: string;
   matchPassword(enteredPassword: string): Promise<boolean>;
 }

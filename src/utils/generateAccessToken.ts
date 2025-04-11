@@ -8,7 +8,7 @@ const generateAccessToken = (user: IUser): string => {
     audience: "API V1",
   };
 
-  if (!user.jwt_secret) {
+  if (!user.access_token_secret_key) {
     throw new Error("JWT secret is missing for the user");
   }
 
@@ -16,7 +16,7 @@ const generateAccessToken = (user: IUser): string => {
     {
       id: user._id,
     },
-    user.jwt_secret,
+    user.access_token_secret_key,
     jwtOptions
   );
 };

@@ -31,11 +31,15 @@ const userSchema: Schema<IUser> = new Schema(
       default: "general",
     },
     permissions: { type: [String], default: [] },
-    refreshToken: {
+    access_token_secret_key: {
       type: String,
       default: null,
     },
-    jwt_secret: {
+    refresh_token_secret_key: {
+      type: String,
+      required: true,
+    },
+    refreshToken: {
       type: String,
       required: true,
     },
