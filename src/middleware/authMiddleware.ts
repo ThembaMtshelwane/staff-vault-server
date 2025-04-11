@@ -23,6 +23,8 @@ export const protect = expressAsyncHandler(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     const accessToken = req.cookies.accessToken;
 
+    console.log("req.cookies: ", req.cookies);
+
     if (!accessToken) {
       console.log("Protect - Not authorized, no token");
 
