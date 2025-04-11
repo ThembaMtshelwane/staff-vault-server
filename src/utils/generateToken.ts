@@ -8,10 +8,7 @@ import { after90Days } from "../constants/date.consts";
 const generateToken = async (res: Response, user: IUser) => {
   try {
     const accessToken = generateAccessToken(user);
-    console.log("accessToken:  ", accessToken);
-
     const refreshToken = generateRefreshToken(user);
-    console.log("refreshToken:  ", refreshToken);
 
     user.refreshToken = refreshToken;
     await user.save();
@@ -51,7 +48,7 @@ const refreshCookieOptions = (): CookieOptions => ({
   sameSite: "strict",
   secure: NODE_ENV === "production",
   expires: after90Days(),
-  path: "/api/refresh",
+  path: "/api",
 });
 
 export default generateToken;
