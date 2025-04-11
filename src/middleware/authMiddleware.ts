@@ -23,8 +23,6 @@ export const protect = expressAsyncHandler(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     const accessToken = req.cookies.accessToken;
 
-    console.log("req.cookies: ", req.cookies);
-
     if (!accessToken) {
       console.log("Protect - Not authorized, no token");
 
@@ -58,10 +56,14 @@ export const protect = expressAsyncHandler(
     }
 
     try {
+      console.log("accessToken: ", accessToken);
+      console.log("currentJwtSecret: ", currentJwtSecret);
       jwt.verify(accessToken, currentJwtSecret as string);
       req.user = user as IUser; // Attach user to request object
       next(); // Proceed to the next middleware or route handler
     } catch (verificationError) {
+      console.log("verificationError: ", verificationError);
+
       return next(
         new HTTP_Error("Not authorized, invalid token", UNAUTHORIZED)
       );
