@@ -10,6 +10,8 @@ const generateToken = async (res: Response, user: IUser) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
+    console.log("refreshToken  ", refreshToken);
+
     user.refreshToken = refreshToken;
     await user.save();
 
@@ -28,6 +30,8 @@ const setAuthCookies = (
   refreshToken: string
 ) => {
   if (!res.headersSent) {
+    console.log("set refresh cookie ", refreshToken);
+
     res.cookie("accessToken", accessToken, accessCookieOptions());
     res.cookie("refreshToken", refreshToken, refreshCookieOptions());
   } else {
@@ -47,7 +51,7 @@ const refreshCookieOptions = (): CookieOptions => ({
   httpOnly: true,
   sameSite: "strict",
   secure: NODE_ENV === "production",
-  maxAge: after90Days().getMilliseconds(),
+  maxAge: 1000 * 60 * 60 * 24 * 90,
   path: "/api",
 });
 

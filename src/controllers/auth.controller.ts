@@ -5,25 +5,26 @@ import generateAccessToken from "../utils/generateAccessToken";
 
 import jwt from "jsonwebtoken";
 import { IUser } from "../detinitions";
+import HTTP_Error from "../utils/httpError";
+import { FORBIDDEN, UNAUTHORIZED } from "../constants/http.codes";
 
 export const refreshAccessToken = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
-      res.status(401).json({ message: "No refresh token found" });
+      throw new HTTP_Error("No refresh token found", UNAUTHORIZED);
     }
 
-    // Decode without verification to get user ID
     const decoded = jwt.decode(refreshToken) as { id: string };
 
     if (!decoded || !decoded.id) {
-      res.status(403).json({ message: "Invalid token structure" });
+      throw new HTTP_Error("Invalid token structure", FORBIDDEN);
     }
 
     const user = (await User.findById(decoded.id)) as IUser;
     if (!user || !user.refresh_token_secret_key) {
-      res.status(403).json({ message: "User not found or missing secret" });
+      throw new HTTP_Error("User not found or missing secret", FORBIDDEN);
     }
 
     try {
@@ -34,7 +35,7 @@ export const refreshAccessToken = expressAsyncHandler(
       res.status(200).json({ accessToken: newAccessToken });
     } catch (err) {
       console.log("Refresh token error:", err);
-      res.status(403).json({ message: "Invalid or expired refresh token" });
+      throw new HTTP_Error("Invalid or expired refresh token", FORBIDDEN);
     }
   }
 );
