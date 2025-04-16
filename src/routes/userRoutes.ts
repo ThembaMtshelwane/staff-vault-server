@@ -53,7 +53,7 @@ router.post(
 router.post("/login", validateLogin, loginUser);
 router.post(
   "/logout",
-  routeAccess(["admin", "general", "super_admin"]),
+  // routeAccess(["admin", "general", "super_admin"]),
   logoutUser
 );
 
