@@ -39,7 +39,7 @@ const accessCookieOptions = (): CookieOptions => ({
   httpOnly: true,
   sameSite: "strict",
   secure: NODE_ENV === "production",
-  expires: after90Days(),
+  maxAge: 1000 * 60 * 15,
   path: "/api",
 });
 
@@ -47,7 +47,7 @@ const refreshCookieOptions = (): CookieOptions => ({
   httpOnly: true,
   sameSite: "strict",
   secure: NODE_ENV === "production",
-  expires: after90Days(),
+  maxAge: after90Days().getMilliseconds(),
   path: "/api",
 });
 
