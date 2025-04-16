@@ -20,7 +20,6 @@ app.use(
   cors({
     origin: ["http://localhost:3000", "https://staff-vault.vercel.app"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
