@@ -3,7 +3,6 @@ import { CookieOptions, Response } from "express";
 import generateAccessToken from "./generateAccessToken";
 import { IUser } from "../detinitions";
 import generateRefreshToken from "./generateRefreshToken";
-import { after90Days } from "../constants/date.consts";
 
 const generateToken = async (res: Response, user: IUser) => {
   try {
@@ -43,7 +42,7 @@ const accessCookieOptions = (): CookieOptions => ({
   httpOnly: true,
   sameSite: "strict",
   secure: NODE_ENV === "production",
-  maxAge: 1000 * 60 * 15,
+  maxAge: 1000 * 60 * 1,
   path: "/api",
 });
 
