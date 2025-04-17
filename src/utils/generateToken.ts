@@ -42,7 +42,7 @@ const accessCookieOptions = (): CookieOptions => ({
   httpOnly: true,
   sameSite: "strict",
   secure: NODE_ENV === "production",
-  maxAge: 1000 * 60 * 1,
+  maxAge: 1000 * 15,
   path: "/api",
 });
 
