@@ -4,7 +4,7 @@ import { after90Days } from "../constants/date.consts";
 
 const generateRefreshToken = (user: IUser) => {
   const jwtOptions: SignOptions = {
-    expiresIn: after90Days().getMilliseconds(),
+    expiresIn: "90d",
     issuer: "ThembaMM3@gmail.com",
     audience: "API V1",
   };

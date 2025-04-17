@@ -23,6 +23,7 @@ import {
   validateFetchFilteredDocs,
   validateModelID,
 } from "../middleware/validators/genericValidators";
+import { refreshAccessToken } from "../controllers/auth.controller";
 
 const router = express.Router();
 
@@ -65,6 +66,9 @@ router.post(
   addUser
 );
 router.get("/profile", protect, getUserProfile);
+
+router.get("/refresh-token", refreshAccessToken);
+
 router
   .route("/:id")
   .get(

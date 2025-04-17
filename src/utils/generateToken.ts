@@ -9,7 +9,7 @@ const generateToken = async (res: Response, user: IUser) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    console.log("refreshToken  ", refreshToken);
+    // console.log("refreshToken  ", refreshToken);
 
     user.refreshToken = refreshToken;
     await user.save();
@@ -29,10 +29,18 @@ const setAuthCookies = (
   refreshToken: string
 ) => {
   if (!res.headersSent) {
-    console.log("set refresh cookie ", refreshToken);
+    // console.log("set refresh cookie ", refreshToken);
 
     res.cookie("accessToken", accessToken, accessCookieOptions());
     res.cookie("refreshToken", refreshToken, refreshCookieOptions());
+  } else {
+    console.error("Headers already sent; cannot set cookies.");
+  }
+};
+
+export const setAccessTokenCookies = (res: Response, accessToken: string) => {
+  if (!res.headersSent) {
+    res.cookie("accessToken", accessToken, accessCookieOptions());
   } else {
     console.error("Headers already sent; cannot set cookies.");
   }
