@@ -3,7 +3,7 @@ import { IUser } from "../detinitions";
 
 const generateAccessToken = (user: IUser): string => {
   const jwtOptions: SignOptions = {
-    expiresIn: 15,
+    expiresIn: "1h",
     issuer: "ThembaMM3@gmail.com",
     audience: "API V1",
   };
