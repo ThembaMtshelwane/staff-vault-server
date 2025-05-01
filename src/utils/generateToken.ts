@@ -40,6 +40,7 @@ const setAuthCookies = (
 
 export const setAccessTokenCookies = (res: Response, accessToken: string) => {
   if (!res.headersSent) {
+    console.log("new access token cookie created");
     res.cookie("accessToken", accessToken, accessCookieOptions());
   } else {
     console.error("Headers already sent; cannot set cookies.");
