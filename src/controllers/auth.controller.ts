@@ -13,8 +13,6 @@ export const refreshAccessToken = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
 
-    console.log("ACTIVATED refreshAccessToken FUNCTION");
-
     if (!refreshToken) {
       throw new HTTP_Error("No refresh token found", UNAUTHORIZED);
     }
@@ -26,7 +24,6 @@ export const refreshAccessToken = expressAsyncHandler(
     }
 
     const user = (await User.findById(decoded.id)) as IUser;
-    console.log("user  ", user);
 
     if (!user || !user.refresh_token_secret_key) {
       throw new HTTP_Error("User not found or missing secret", FORBIDDEN);

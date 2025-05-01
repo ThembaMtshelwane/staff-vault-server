@@ -52,7 +52,7 @@ const accessCookieOptions = (): CookieOptions => ({
   sameSite: "strict",
   secure: NODE_ENV === "production",
   maxAge: 1000 * 15,
-  path: "/api",
+  path: "/",
 });
 
 const refreshCookieOptions = (): CookieOptions => ({
@@ -60,7 +60,7 @@ const refreshCookieOptions = (): CookieOptions => ({
   sameSite: "strict",
   secure: NODE_ENV === "production",
   maxAge: 1000 * 60 * 60 * 24 * 90,
-  path: "/api",
+  path: "/",
 });
 
 export default generateToken;
