@@ -47,3 +47,15 @@ export interface FileMetadata {
   metadata?: any;
   userId: string;
 }
+
+export interface IOrganization {
+  name: string;
+  description: string;
+  registrationNumber: string;
+  admin: string;
+  address: string;
+  phone: string;
+  email: string;
+}
+
+export interface IOrganizationDocument extends IOrganization, Document {}

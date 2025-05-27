@@ -8,6 +8,7 @@ import cors from "cors";
 import userRoutes from "./routes/userRoutes";
 import departmentRoutes from "./routes/departmentRoutes";
 import fileRoutes from "./routes/fileRoutes";
+import organizationRoutes from "./routes/organization.route";
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
 import { protect, routeAccess } from "./middleware/authMiddleware";
 
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use("/api/organizations", organizationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/departments", protect, departmentRoutes);
 app.use("/api/files", protect, routeAccess(["general"]), fileRoutes);
