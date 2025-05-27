@@ -31,8 +31,8 @@ router
   .route("/")
   .get(protect, routeAccess(["admin", "general"]), fetchAllUsers)
   .post(
-    protect,
-    routeAccess(["admin", "super_admin"]),
+    // protect,
+    // routeAccess(["admin", "super_admin"]),
     validateRegisterAllUsers,
     registerAllUsers
   );

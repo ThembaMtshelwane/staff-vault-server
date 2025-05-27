@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { ADMIN_PASSWORD, USER_PASSWORD } from "../constants/env.const";
 import { BAD_REQUEST } from "../constants/http.codes";
 import { IDepartmentBasicInfo, IUser } from "../detinitions";
@@ -6,7 +5,6 @@ import User from "../model/userModel";
 import HTTP_Error from "../utils/httpError";
 import { removeDuplicates } from "../utils/utils";
 import crypto from "crypto";
-import generateToken from "../utils/generateToken";
 
 interface IUserCredentials {
   email: string;
@@ -26,6 +24,8 @@ interface IUserData {
 export const loginService = async (userCredentials: IUserCredentials) => {
   const { email, password } = userCredentials;
   const user: IUser | null = await User.findOne({ email });
+  console.log(user);
+
   if (user && (await user.matchPassword(password))) return user;
   else return null;
 };
@@ -85,12 +85,18 @@ export const massStaffRegistrationService = async (
         let user = await User.findOne({ email });
         if (!user) {
           // await generateToken(res, user);
-          const jwt_secret = crypto.randomBytes(32).toString("hex");
+          const refresh_token_secret_key = crypto
+            .randomBytes(32)
+            .toString("hex");
+          const access_token_secret_key = crypto
+            .randomBytes(32)
+            .toString("hex");
           user = await User.create({
             email,
             permissions: ["modify_files", "modify_data"],
             password: USER_PASSWORD,
-            jwt_secret,
+            refresh_token_secret_key,
+            access_token_secret_key,
           });
           data.push(user);
         } else {
