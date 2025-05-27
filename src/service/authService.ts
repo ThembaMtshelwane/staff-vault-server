@@ -24,7 +24,6 @@ interface IUserData {
 export const loginService = async (userCredentials: IUserCredentials) => {
   const { email, password } = userCredentials;
   const user: IUser | null = await User.findOne({ email });
-  console.log(user);
 
   if (user && (await user.matchPassword(password))) return user;
   else return null;
@@ -43,13 +42,15 @@ export const addUserService = async (userData: IUserData) => {
     );
   }
 
-  const jwt_secret = crypto.randomBytes(32).toString("hex");
+  const refresh_token_secret_key = crypto.randomBytes(32).toString("hex");
+  const access_token_secret_key = crypto.randomBytes(32).toString("hex");
 
   const user = {
     firstName: firstName || "Not Available",
     lastName: lastName || "Not Available",
     email,
-    jwt_secret,
+    refresh_token_secret_key,
+    access_token_secret_key,
   };
 
   if (role === "admin") {
