@@ -61,8 +61,6 @@ export const getOrganizationByAdmin = expressasynchandler(async (req, res) => {
 
   const organizationExists = await Organization.findOne({ admin });
 
-  console.log("organizationExists  ", organizationExists);
-
   if (!organizationExists) {
     throw new HTTP_Error("No organization found with this admin", BAD_REQUEST);
   }
