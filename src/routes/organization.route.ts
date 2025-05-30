@@ -7,6 +7,6 @@ import {
 const organizationRoutes = express.Router();
 
 organizationRoutes.post("/", addOrganization);
-organizationRoutes.get("/:admin", getOrganizationByAdmin);
+organizationRoutes.get("/admin/:admin", getOrganizationByAdmin);
 
 export default organizationRoutes;
