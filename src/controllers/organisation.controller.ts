@@ -55,7 +55,7 @@ export const getAllOrganizations = expressasynchandler(async (req, res) => {
  *  @access PRIVATE
  */
 export const getOrganizationByAdmin = expressasynchandler(async (req, res) => {
-  const { admin } = req.params;
+  const admin = req.params.admin;
 
   console.log("admin   ", admin);
 
