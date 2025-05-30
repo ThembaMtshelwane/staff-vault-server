@@ -51,7 +51,7 @@ const accessCookieOptions = (): CookieOptions => ({
   httpOnly: true,
   sameSite: "strict",
   secure: NODE_ENV === "production",
-  maxAge: 1000 * 15,
+  maxAge: 1000 * 60 * 15,
   path: "/",
 });
 
