@@ -5,6 +5,7 @@ import express from "express";
 import connectDB from "../src/config/db";
 import cors from "cors";
 
+import organizationRoutes from "../src/routes/organization.route";
 import userRoutes from "../src/routes/userRoutes";
 import departmentRoutes from "../src/routes/departmentRoutes";
 import fileRoutes from "../src/routes/fileRoutes";
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use("/api/organizations", organizationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/departments", protect, departmentRoutes);
 app.use("/api/files", protect, routeAccess(["general"]), fileRoutes);
